@@ -1,4 +1,4 @@
-class Section:
+class Section(object):
     
     def __init__(self, data):
         self.data = data
@@ -6,16 +6,13 @@ class Section:
     @classmethod
     def build(cls, x, y, north, south, east, west):
         data = {}
-        data.x = x
-        data.y = y
+        data["x"] = x
+        data["y"] = y
         
-        walls = {}
-        walls["north"] = bool(north)
-        walls["south"] = bool(south)
-        walls["east"] = bool(east)
-        walls["south"] = bool(south)
-
-        data.walls = walls
+        data["north"] = bool(north)
+        data["south"] = bool(south)
+        data["east"] = bool(east)
+        data["west"] = bool(west)
         return cls(data)
 
     @classmethod
@@ -27,7 +24,7 @@ class Section:
         return cls(copy.data)
 
 
-    @classmethod
+    @staticmethod
     def isAdjacent(cls, s1, s2):
         # check adjacency
         # start at [2, 2]
@@ -49,7 +46,7 @@ class Section:
 
     #returns which wall s1 shares with s2
     #if the sections are not adjacent it will return None
-    @classmethod
+    @staticmethod
     def sharedWall(cls, s1, s2):
 
         if s1.getX() + 1 == s2.getX() and s1.getY() == s2.getY():
@@ -66,7 +63,7 @@ class Section:
 
         return None
 
-    @classmethod
+    @staticmethod
     def isWallOpen(cls, section, wall):
 
         return bool(section.getWalls()[wall])
@@ -76,7 +73,7 @@ class Section:
     @classmethod
     def validTransition(cls, s1, s2):
 
-        sharedWall = Section.(s1, s2)
+        sharedWall = Section.sharedWall(s1, s2)
 
         if sharedWall == None:
             return False
@@ -93,11 +90,47 @@ class Section:
         elif sharedWall == "west":
             return s1.isWallOpen("west") and s2.isWallOpen("east")
 
+    def __str__(self):
+        """
+        closed    ***
+                  * *
+                  ***
+        """
+        string = "*"
+        string += ("*" if self.data["north"] else " ")
+        string += "*"
+        string += "\n"
+        string += ("*" if self.data["west"] else " ")
+        string += " "
+        string += ("*" if self.data["east"] else " ")
+        string += "\n"
+        string += "*"
+        string += ("*" if self.data["south"] else " ")
+        string += "*"
+
+        return string
+
+    def getRow(self, n):
+
+        if n == 0:
+            return "*" + ("*" if self.data["north"] else " ") + "*"
+        elif n == 1:
+            return ("*" if self.data["west"] else " ") + " " + ("*" if self.data["east"] else " ")
+        elif n== 2:
+            return "*" + ("*" if self.data["south"] else " ") + "*"
+        else:
+            return None
+    
+    def dump(self):
+
+        print "x: " + str(self.data.x) + " y: " + str(self.data.y)
+
+        for x in self.data.walls.keys():
+            print str(self.data.walls.keys()[x]) + " " + str(self.data.walls[x])
+
+        
     def getX(self):
-        return self.data.x
+        return self.data["x"]
 
     def getY(self):
-        return self.data.y
-
-    def getWalls(self):
-         return self.data.walls
+        return self.data["y"]
