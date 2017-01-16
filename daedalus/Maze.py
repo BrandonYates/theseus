@@ -17,13 +17,14 @@ class Maze(object):
 
         return cls(maze)
 
-    #returns the result of attempting to traverse the maze
-    #path is an array of Section objects    
+    
+    # Returns the result of attempting to traverse the maze
+    # Path is an array of Section objects
     def correctPath(self, path):
 
         correctStart = (path[0] == self.start)
 
-        #exit early if the path does not begin and end  at the correct section
+        # Exit early if the path does not begin and end  at the correct section
         if not correctStart:
             return False
 
@@ -32,27 +33,31 @@ class Maze(object):
         if not correctEnd:
             return False
 
-        #iterate through transitions and return false if any transition is not valid
-        #any path made up of a sequence of valid transitions which begins and ends
-        #at the correct start and end is considered a valid path
-
-        sections = self.maze["sections"] 
+        # Iterate through transitions and return false if any transition is not valid
+        # any path made up of a sequence of valid transitions which begins and ends
+        # at the correct start and end is considered a valid path
         for step in range(0, path.len - 1):
             s1 = sections[path[step][0], path[step][1]]
             s2 = sections[path[step + 1][0], path[step + 1][1]]
             
-            if not Section.validTransition(s1, s2):
+            if not Section.validTransition(path[step], path[step + 1]):
                 return False
 
-        return True                
-
+        return True
+    
     def __str__(self):
+        
         string = ""
+        
         for x in range(self.maze["length"]):
+            
             for y in range(0, 3):
+                
                 for z in range(self.maze["width"]):
                     string += self.maze["sections"][x][y].getRow(y)
-                string += "\n"    
+                
+                string += "\n"
+        
         return string
 
     def getSections(self):
