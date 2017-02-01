@@ -1,5 +1,6 @@
 from Section import Section
 from Maze import Maze
+import random
 
 class MazeGen:
 
@@ -12,11 +13,80 @@ class MazeGen:
         section = Section({})
         maze = Maze({})
 
-        sections = [[section.build(length, width, 1, 1, 1, 1)for x in range(length)] for y in range(width)]
+        sections = [[section.build(length, width, 1, 1, 1, 1)for x in range(width)] for y in range(length)]
 
         maze = maze.build(length, width, sections, [0,0],[width, length])
 
         return maze
+
+
+    @staticmethod
+    def generateMaze(length, width):
+
+        print "generating maze"
+        sections = [[Section.build(length, width, 1, 1, 1, 1)for x in range(width)] for y in range(length)]
+        fullMaze = Maze.build(length, width, sections, [0,0],[width, length])
+
+        print fullMaze
+        
+        #track available neighbors
+        maze = [[0 for x in range(width)] for y in range(length)]
+        
+        dx = [0, 1, 0, -1]
+        dy = [-1, 0, 1, 0] # 4 directions to move in the maze
+
+        # start the maze from a random cell
+
+        start = [(random.randint(0, width - 1), random.randint(0, length - 1))]
+        end = [(random.randint(0, width - 1), random.randint(0, length - 1))]
+        stack = start
+
+        while len(stack) > 0:
+
+            #print "stack length: " + str(len(stack))
+            (currX, currY) = stack[-1]
+            maze[currY][currX] = 1
+
+            print "currX: " + str(currX) + " currY: " + str(currY)
+
+            # find a new cell to add
+            nlst = [] # list of available neighbors
+
+            #calculate movable directions
+            for i in range(4):
+                newX = currX + dx[i]
+                newY = currY + dy[i]
+                print "newX: " + str(newX) + " newY: " + str(newY)
+                #new cell must be within maze bounds    
+                if newX >= 0 and newX < width and newY >= 0 and newY < length:
+
+                    if maze[newY][newX] == 0:
+                        # of occupied neighbors must be 1 to be available
+                        count = 0
+                        for j in range(4):
+                            ex = newX + dx[j]
+                            ey = newY + dy[j]
+                            print "ex: " + str(ex) + " ey: " + str(ey)
+                            if ex >= 0 and ex < width and ey >= 0 and ey < length:
+                                if maze[ey][ex] == 1:
+                                    count += 1
+                        if count == 1:
+                            nlst.append(i)
+
+            print "nlist length: " + str(len(nlst))
+            # if 1 or more neighbors available then randomly select one and move
+            if len(nlst) > 0:
+                moveIndex = nlst[random.randint(0, len(nlst) - 1)]
+                nextX = dx[moveIndex]
+                nextY = dy[moveIndex]
+
+                #open path between current section and selected neighbor
+                fullMaze.joinSections(currX, currY, nextX, nextY)
+                stack.append((nextX, nextY))
+            else:
+                stack.pop()
+
+        return fullMaze
         
 
                         

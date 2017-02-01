@@ -17,7 +17,36 @@ class Maze(object):
 
         return cls(maze)
 
-    
+    #take coordiantes of two adjacent sections and open the wall between them
+    def joinSections(self, x1, y1, x2, y2):
+
+        s1 = self.maze["sections"][y1][x1]
+        s2 = self.maze["sections"][y2][x2]
+        
+        shared = Section.sharedWall(s1, s2)
+
+        #shared indicates the direction one must travel
+        #to get to s2 from s1
+        #open that wall for s1 and the opposite wall for s2 to allow travel
+        if shared == "north":
+            s1.openWall("north")
+            s2.openWall("south")
+        elif shared == "south":
+            s1.openWall("south")
+            s2.openWall("north")
+        elif shared == "east":
+            s1.openWall("east")
+            s2.openWall("west")
+        elif shared == "west":
+            s1.openWall("west")
+            s2.openWall("east")
+        else:
+            raise ValueError('bad wall value returned by Section.sharedWall(): ' + shared)
+
+        self.maze["sections"][y1][x1] = s1
+        self.maze["sections"][y2][x2] = s2
+
+        
     # Returns the result of attempting to traverse the maze
     # Path is an array of Section objects
     def correctPath(self, path):
@@ -54,7 +83,7 @@ class Maze(object):
             for y in range(0, 3):
                 
                 for z in range(self.maze["width"]):
-                    string += self.maze["sections"][x][y].getRow(y)
+                    string += self.maze["sections"][y][x].getRow(y)
                 
                 string += "\n"
         

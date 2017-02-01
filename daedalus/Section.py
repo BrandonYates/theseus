@@ -47,7 +47,7 @@ class Section(object):
     #returns which wall s1 shares with s2
     #if the sections are not adjacent it will return None
     @staticmethod
-    def sharedWall(cls, s1, s2):
+    def sharedWall(s1, s2):
 
         if s1.getX() + 1 == s2.getX() and s1.getY() == s2.getY():
             return "east";
@@ -64,9 +64,18 @@ class Section(object):
         return None
 
     @staticmethod
-    def isWallOpen(cls, section, wall):
+    def isWallOpen(section, wall):
 
         return bool(section.getWalls()[wall])
+
+    #set a particular wall to open
+    def openWall(self, wall):
+
+        #wall already open
+        if self.data[wall]:
+            return
+        else:
+            self[wall] = True
 
     #returns wether or not moving from one section to another is possible
     #are these two sections adjacent, are there any walls betweent them?    
@@ -134,3 +143,11 @@ class Section(object):
 
     def getY(self):
         return self.data["y"]
+
+    def getWalls(self):
+        walls = []
+        walls.append(self.data["north"])
+        walls.append(self.data["south"])
+        walls.append(self.data["east"])
+        walls.append(self.data["west"])
+        return walls
