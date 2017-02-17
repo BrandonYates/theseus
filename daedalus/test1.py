@@ -38,6 +38,7 @@ maze.joinSections(0,0,0,1)
 
 
 print maze
-#maze2 = MazeGen.generateMaze(10, 10)
 
-#print maze2
+maze2 = MazeGen.generateMaze(10, 10)
+
+print maze2

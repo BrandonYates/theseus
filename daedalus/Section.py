@@ -136,12 +136,13 @@ class Section(object):
     
     def dump(self):
 
-        print "x: " + str(self.data.x) + " y: " + str(self.data.y)
+        print "x: " + str(self.data["x"]) + " y: " + str(self.data["y"])
 
-        for x in self.data.walls.keys():
-            print str(self.data.walls.keys()[x]) + " " + str(self.data.walls[x])
-
-        
+        print "north: " + str(self.data["north"])
+        print "south: " + str(self.data["south"])
+        print "east: " + str(self.data["east"])
+        print "west: " + str(self.data["west"])
+       
     def getX(self):
         return self.data["x"]
 

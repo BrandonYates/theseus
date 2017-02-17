@@ -20,12 +20,18 @@ class Maze(object):
     #take coordiantes of two adjacent sections and open the wall between them
     def joinSections(self, x1, y1, x2, y2):
 
+        #print "x1: " + str(x1) + " y1: " + str(y1)
+        #print "x2: " + str(x2) + " y2: " + str(y2)
+
         s1 = self.maze["sections"][y1][x1]
         s2 = self.maze["sections"][y2][x2]
+
+        #s1.dump()
+        #s2.dump()
         
         shared = Section.sharedWall(s1, s2)
 
-        print "shared wall is " + shared
+        #print "shared wall is " + shared
 
         #shared indicates the direction one must travel
         #to get to s2 from s1
@@ -83,7 +89,7 @@ class Maze(object):
         for y in range(self.maze["length"]):
             for z in range(0, 3):
                 for x in range(self.maze["width"]):
-                    print "x: " + str(x) + " y: " + str(y) + " z: " + str(z)
+                    #print "x: " + str(x) + " y: " + str(y) + " z: " + str(z)
                     string += self.maze["sections"][y][x].getRow(z)
                 
                 string += "\n"

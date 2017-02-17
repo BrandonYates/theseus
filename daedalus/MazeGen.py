@@ -24,7 +24,7 @@ class MazeGen:
     def generateMaze(length, width):
 
         print "generating maze"
-        sections = [[Section.build(length, width, False, False, False, False)for x in range(width)] for y in range(length)]
+        sections = [[Section.build(x, y, False, False, False, False)for x in range(width)] for y in range(length)]
         fullMaze = Maze.build(length, width, sections, [0,0],[width, length])
 
         print fullMaze
@@ -89,7 +89,7 @@ class MazeGen:
                 stack.pop()
 
             iters += 1
-            print str(iters)
+            #print str(iters)
             if iters % 40 == 0:
                 print str((iters * 100)/400) + "%"
             if iters > (400):
