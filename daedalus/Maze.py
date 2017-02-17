@@ -25,15 +25,17 @@ class Maze(object):
         
         shared = Section.sharedWall(s1, s2)
 
+        print "shared wall is " + shared
+
         #shared indicates the direction one must travel
         #to get to s2 from s1
         #open that wall for s1 and the opposite wall for s2 to allow travel
         if shared == "north":
-            s1.openWall("north")
-            s2.openWall("south")
-        elif shared == "south":
-            s1.openWall("south")
             s2.openWall("north")
+            s1.openWall("south")
+        elif shared == "south":
+            s2.openWall("south")
+            s1.openWall("north")
         elif shared == "east":
             s1.openWall("east")
             s2.openWall("west")
@@ -78,12 +80,11 @@ class Maze(object):
         
         string = ""
         
-        for x in range(self.maze["length"]):
-            
-            for y in range(0, 3):
-                
-                for z in range(self.maze["width"]):
-                    string += self.maze["sections"][y][x].getRow(y)
+        for y in range(self.maze["length"]):
+            for z in range(0, 3):
+                for x in range(self.maze["width"]):
+                    print "x: " + str(x) + " y: " + str(y) + " z: " + str(z)
+                    string += self.maze["sections"][y][x].getRow(z)
                 
                 string += "\n"
         

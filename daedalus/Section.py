@@ -25,15 +25,19 @@ class Section(object):
 
 
     @staticmethod
-    def isAdjacent(cls, s1, s2):
+    def isAdjacent(s1, s2):
         # check adjacency
         # start at [2, 2]
         # [1, 2], [3, 2], [2,1], [2, 3] are adjacent
-    
+
+        print "isAdjacent"
+        print "x: " + str(s1.getX()) + " y: " + str(s1.getY())
+        print "x: " + str(s2.getX()) + " y: " + str(s2.getY())
+        
         if s1.getX() + 1 == s2.getX() and s1.getY() == s2.getY():
             return True;
 
-        elif s1.getX - 1 == s2.getX() and s1.getY() == s2.getY():
+        elif s1.getX() - 1 == s2.getX() and s1.getY() == s2.getY():
             return True;
 
         elif s1.getX() == s2.getX() and s1.getY() + 1 == s2.getY():
@@ -52,7 +56,7 @@ class Section(object):
         if s1.getX() + 1 == s2.getX() and s1.getY() == s2.getY():
             return "east";
 
-        elif s1.getX() == s2.getX() and s1.getY() == s2.getY():
+        elif s1.getX() - 1 == s2.getX() and s1.getY() == s2.getY():
             return "west"
 
         elif s1.getX() == s2.getX() and s1.getY() + 1 == s2.getY():
@@ -63,19 +67,18 @@ class Section(object):
 
         return None
 
-    @staticmethod
-    def isWallOpen(section, wall):
+    def isWallOpen(self, wall):
 
-        return bool(section.getWalls()[wall])
+        return self.data[wall]
 
     #set a particular wall to open
     def openWall(self, wall):
 
         #wall already open
-        if self.data[wall]:
+        if bool(self.data[wall]):
             return
         else:
-            self[wall] = True
+            self.data[wall] = True
 
     #returns wether or not moving from one section to another is possible
     #are these two sections adjacent, are there any walls betweent them?    
@@ -105,16 +108,17 @@ class Section(object):
                   * *
                   ***
         """
+        
         string = "*"
-        string += ("*" if self.data["north"] else " ")
+        string += ("*" if not bool(self.data["north"]) else " ")
         string += "*"
         string += "\n"
-        string += ("*" if self.data["west"] else " ")
+        string += ("*" if not bool(self.data["west"]) else " ")
         string += " "
-        string += ("*" if self.data["east"] else " ")
+        string += ("*" if not bool(self.data["east"]) else " ")
         string += "\n"
         string += "*"
-        string += ("*" if self.data["south"] else " ")
+        string += ("*" if not bool(self.data["south"]) else " ")
         string += "*"
 
         return string
@@ -122,11 +126,11 @@ class Section(object):
     def getRow(self, n):
 
         if n == 0:
-            return "*" + ("*" if self.data["north"] else " ") + "*"
+            return "*" + ("*" if not self.data["north"] else " ") + "*"
         elif n == 1:
-            return ("*" if self.data["west"] else " ") + " " + ("*" if self.data["east"] else " ")
-        elif n== 2:
-            return "*" + ("*" if self.data["south"] else " ") + "*"
+            return ("*" if not self.data["west"] else " ") + " " + ("*" if not self.data["east"] else " ")
+        elif n == 2:
+            return "*" + ("*" if not self.data["south"] else " ") + "*"
         else:
             return None
     
@@ -145,9 +149,9 @@ class Section(object):
         return self.data["y"]
 
     def getWalls(self):
-        walls = []
-        walls.append(self.data["north"])
-        walls.append(self.data["south"])
-        walls.append(self.data["east"])
-        walls.append(self.data["west"])
+        walls = {}
+        walls["north"] = self.data["north"]
+        walls["south"] = self.data["south"]
+        walls["east"] = self.data["east"]
+        walls["west"] = self.data["west"]
         return walls
