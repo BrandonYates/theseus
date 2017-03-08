@@ -73,15 +73,10 @@ class Section(object):
 
     #set a particular wall to open
     def openWall(self, wall):
+        self.data[wall] = True
 
-        #wall already open
-        if bool(self.data[wall]):
-            return
-        else:
-            self.data[wall] = True
-
-    #returns wether or not moving from one section to another is possible
-    #are these two sections adjacent, are there any walls betweent them?    
+    #returns whether or not moving from one section to another is possible
+    #e.g. are these two sections adjacent? Are there any walls between them?    
     @classmethod
     def validTransition(cls, s1, s2):
 
@@ -102,6 +97,8 @@ class Section(object):
         elif sharedWall == "west":
             return s1.isWallOpen("west") and s2.isWallOpen("east")
 
+    #prints this single section independently
+    #cannot be used in a loop to print a full maze
     def __str__(self):
         """
         closed    ***
@@ -123,6 +120,7 @@ class Section(object):
 
         return string
 
+    #used to iterate through a maze and print it to the console
     def getRow(self, n):
 
         if n == 0:

@@ -1,6 +1,9 @@
 from MazeGen import MazeGen
 from Section import Section
 
+
+#miscellaneous tests
+
 maze = MazeGen.initMaze(2,2)
 
 print maze.getSections()[0][0]
@@ -39,6 +42,6 @@ maze.joinSections(0,0,0,1)
 
 print maze
 
-maze2 = MazeGen.generateMaze(10, 10)
+maze2 = MazeGen.generateMaze(40, 40)
 
 print maze2

@@ -23,11 +23,11 @@ class MazeGen:
     @staticmethod
     def generateMaze(length, width):
 
-        print "generating maze"
+        #print "generating maze"
         sections = [[Section.build(x, y, False, False, False, False)for x in range(width)] for y in range(length)]
         fullMaze = Maze.build(length, width, sections, [0,0],[width, length])
 
-        print fullMaze
+        #print fullMaze
         
         #track available neighbors
         maze = [[0 for x in range(width)] for y in range(length)]
@@ -41,6 +41,8 @@ class MazeGen:
         end = [(random.randint(0, width - 1), random.randint(0, length - 1))]
         stack = start
 
+        print start
+        print end
         iters = 0
         while len(stack) > 0:
 
@@ -61,7 +63,7 @@ class MazeGen:
                 if newX >= 0 and newX < width and newY >= 0 and newY < length:
 
                     if maze[newY][newX] == 0:
-                        # of occupied neighbors must be 1 to be available
+                        # of connected neighbors must be 1 to be available
                         count = 0
                         for j in range(4):
                             ex = newX + dx[j]
@@ -69,31 +71,29 @@ class MazeGen:
                             #print "ex: " + str(ex) + " ey: " + str(ey)
                             if ex >= 0 and ex < width and ey >= 0 and ey < length:
                                 if maze[ey][ex] == 1:
+                                    #print "(" + str(ex) + "," + str(ey) + "): visited"
                                     count += 1
                         #print "count: " + str(count)
                         if count == 1:
-                            #print "append: " + str(i) 
+                            #print "append: " + str(i)
+                            #print "(" + str(newX) + "," + str(newY) + "): available"
                             nlst.append(i)
 
             #print "nlist length: " + str(len(nlst))
             # if 1 or more neighbors available then randomly select one and move
             if len(nlst) > 0:
-                moveIndex = nlst[random.randint(0, len(nlst) - 1)]
-                nextX = currX + dx[moveIndex]
-                nextY = currY + dy[moveIndex]
+                while len(nlst) > 0:
+                    choice = random.randint(0, len(nlst) - 1)
+                    moveIndex = nlst[choice]
+                    nextX = currX + dx[moveIndex]
+                    nextY = currY + dy[moveIndex]
 
-                #open path between current section and selected neighbor
-                fullMaze.joinSections(currX, currY, nextX, nextY)
-                stack.append((nextX, nextY))
+                    #open path between current section and selected neighbor
+                    fullMaze.joinSections(currX, currY, nextX, nextY)
+                    stack.append((nextX, nextY))
+                    nlst.remove(moveIndex)
             else:
                 stack.pop()
-
-            iters += 1
-            #print str(iters)
-            if iters % 40 == 0:
-                print str((iters * 100)/400) + "%"
-            if iters > (400):
-                return fullMaze
 
         return fullMaze
         

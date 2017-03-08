@@ -17,7 +17,16 @@ class Maze(object):
 
         return cls(maze)
 
-    #take coordiantes of two adjacent sections and open the wall between them
+    def setStart(self, x, y):
+        self.maze["start"] = (x, y)
+
+    def setEnd(self, x, y):
+        self.maze["end"] = (x, y)
+
+    def get(self, x, y):
+        return self.maze["sections"][y][x]
+
+    #take coordinates of two adjacent sections and open the wall between them
     def joinSections(self, x1, y1, x2, y2):
 
         #print "x1: " + str(x1) + " y1: " + str(y1)
@@ -81,7 +90,8 @@ class Maze(object):
                 return False
 
         return True
-    
+
+    #returns the str representation of a full ASCII maze to print to the console
     def __str__(self):
         
         string = ""
